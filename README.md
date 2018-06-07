@@ -21,6 +21,7 @@
 
 # Running the image in kubernetes for single pod
 - minikube start
+- cd basics
 - kubectl create -f config/k8sDemoOnePod.yml
 - kubectl get pods
 - kubectl get pod scratch-app
@@ -37,6 +38,7 @@
 
 # Running the image in kubernetes with replication controller
 - minikube start
+- cd basics
 - kubectl create -f config/k8sDemoReplicas.yml
 - kubectl get replicationcontrollers
 - kubectl describe rc scratch-app-controller
@@ -54,6 +56,7 @@
 
 # Running the image in kubernetes with deployment
 - minikube start
+- cd basics
 - kubectl create -f config/k8sDemoDeployment.yml
 - kubectl get deployments
 - kubectl describe deployment scratch-app-deployment
@@ -78,6 +81,7 @@
 
 # Creating service from config file
 - minikube start
+- cd basics
 - kubectl create -f config/k8sDemoDeployment.yml
 - kubectl get deployments
 - kubectl create -f config/k8sDemoSvc.yml
@@ -89,6 +93,7 @@
 
 # Using Node selectors:
 - minikube start
+- cd basics
 - kubectl get nodes
 - kubectl get nodes --show-labels
 - kubectl create -f config/k8sDemoDepNodeSelector.yml
@@ -106,6 +111,7 @@
 
 # Adding secrets with volumes
 - minikube start
+- cd basics
 - create -f config/secrets/my-secrets.yml 
 - kubectl create -f config/secrets/my-secrets.yml
 - kubectl create -f config/k8sDemoDepSecretsVolume.yml
@@ -126,8 +132,9 @@
 - redis-cli -h IP_OF_THE_DOCKER_MACHINE_HOST -p 7001
 - docker rm -f my-redis-container
 
-# Running the redis and app pods in kubernetes
+# Running the redis and app as separate containers in same pod in kubernetes
 - minikube start
+- cd appAndRedis
 - kubectl create -f config/k8sRedisPod.yml
 - kubectl get pods
 - kubectl get pod redis-app
@@ -135,10 +142,29 @@
 - kubectl create -f config/k8sRedisSvc.yml
 - kubectl get service
 - minikube service redis-app-service --url
-- redis-cli -h IP_OF_THE_SERVICE -p 32001
-- APP_URL_RETRIEVED_IN_PREVIOUS_COMMAND/Arya
+- redis-cli -h IP_OF_THE_SERVICE -p 32002
+- APP_URL_RETRIEVED_IN_PREVIOUS_COMMAND:32001/Arya
 - kubectl delete service redis-app-service
 - kubectl delete pod redis-app
+
+# Running the redis and app in separate pods in kubernetes. Sevice discovery via env variables.
+- minikube start
+- cd svcDiscEnvVar
+- kubectl create -f config/k8sRedisPod.yml
+- kubectl describe pod redis-pod
+- kubectl create -f config/k8sRedisSvc.yml
+- kubectl get service
+- kubectl create -f config/k8sRedisAppPod.yml
+- kubectl describe pod redis-app-svc-disc
+- kubectl logs redis-app-svc-disc 
+- kubectl create -f config/k8sRedisAppSvc.yml
+- kubectl get service
+- minikube service redis-app-service --url
+- APP_URL_RETRIEVED_IN_PREVIOUS_COMMAND:32001/Arya
+- kubectl delete service redis-app-service
+- kubectl delete service redis--service
+- kubectl delete pod redis-app-svc-disc
+- kubectl delete pod redis-pod
 
 # Debugging tricks
 - k8s: Simple port forwarding on localhost to pod:

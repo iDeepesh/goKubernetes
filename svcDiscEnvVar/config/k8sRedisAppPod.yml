@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis-app-svc-disc
+  labels:
+    app: redis-app-svc-disc-label
+spec:
+  containers:
+  - name: k8s-demo
+    image: ideepesh/k8s-redis-app-svc-disc:envVar
+    imagePullPolicy: Always
+    ports:
+    - name: redis-app-port
+      containerPort: 7080

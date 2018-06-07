@@ -4,13 +4,13 @@ metadata:
   name: redis-app-service
 spec:
   ports:
-  - port: 31002
-    nodePort: 31002
+  - port: 32001
+    nodePort: 32001
     protocol: TCP
     targetPort: redis-app-port
     name: redis-app-svc-port
-  - port: 32001
-    nodePort: 32001
+  - port: 32002
+    nodePort: 32002
     targetPort: redis-port
     name: redis-svc-port
   selector:
