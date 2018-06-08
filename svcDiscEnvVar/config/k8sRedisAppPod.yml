@@ -12,3 +12,6 @@ spec:
     ports:
     - name: redis-app-port
       containerPort: 7080
+    env:
+    - name: SVC_DISC_REDIS_HOST
+      value: redis-service

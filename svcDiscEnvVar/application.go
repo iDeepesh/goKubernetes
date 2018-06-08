@@ -46,7 +46,8 @@ func main() {
 	host := os.Getenv("REDIS_SERVICE_SERVICE_HOST")
 	port := os.Getenv("REDIS_SERVICE_SERVICE_PORT")
 	addr := host + ":" + port
-	fmt.Println("Redis service address is:", addr)
+	fmt.Println("Redis service address retrived from the k8s generated env variable is:", addr)
+	fmt.Println("Redis service address retrieved from the custom env variable is:", os.Getenv("SVC_DISC_REDIS_HOST"))
 	rClient = *(redis.NewClient(&redis.Options{
 		Addr: addr,
 	}))

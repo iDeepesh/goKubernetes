@@ -123,6 +123,7 @@
   - cat password 
   - mount
   - exit
+- kubectl delete secrets user-secrets
 - kubectl delete deployment scratch-app-dep-secretes-volume
 
 # Running redis in docker container
@@ -166,6 +167,27 @@
 - kubectl delete pod redis-app-svc-disc
 - kubectl delete pod redis-pod
 
+# Config map
+- minikube start
+- cd basics
+- kubectl create -f config/configMap/user-config.yaml 
+- kubectl create configmap prop-config --from-file=config/configMaps/prop-config.properties 
+- kubectl create -f config/k8sDemoDepConfigMapVolume.yml
+- kubectl get po
+- kubectl describe pod scratch-app-deployment-5bf9dc78f7-2hrbh
+- kubectl exec scratch-app-deployment-5bf9dc78f7-2hrbh -it -- /bin/bash
+  - cd /etc/config/
+  - cat username 
+  - cat email 
+  - cd /etc/properties/
+  - cat prop-config.properties
+  - mount
+  - exit
+- kubectl delete deployment scratch-app-dep-config-map-volume
+- kubectl delete configmap user-config
+- kubectl delete configmap prop-config
+
+
 # Debugging tricks
 - k8s: Simple port forwarding on localhost to pod:
   - kubectl port-forward FULL_POD_NAME 6080:7080
@@ -175,5 +197,5 @@
   - docker-machine ssh default
 - Service discovery
   - kubectl get po --namespace=kube-system
-  - kubectl run -i --tty busybox --image=busybox -- sh
+  - kubectl run -i --tty busybox --image=busybox ---restart=Never -- sh
   - nslookup NAME_OF_ANY_SERVICE_CLUSTER

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scratch-app-dep-config-map-volume
+  labels:
+    apps: scratch-app-label
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: scratch-app-label
+  template:
+    metadata:
+      name: scratch-app
+      labels:
+        app: scratch-app-label
+    spec:
+      containers:
+      - name: k8s-demo
+        image: ideepesh/k8s-demo
+        ports:
+        - name: deploy-port
+          containerPort: 7080
+        volumeMounts:
+        - name: user-config-volume
+          mountPath: /etc/config
+          readOnly: true
+        - name: prop-config-volume
+          mountPath: /etc/properties
+          readOnly: true
+      volumes:
+      - name: user-config-volume
+        configMap:
+          name: user-config
+      - name: prop-config-volume
+        configMap:
+          name: prop-config
