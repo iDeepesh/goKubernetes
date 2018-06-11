@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-dep
+  labels:
+    app: nginx-dep-label
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-label
+  template:
+    metadata:
+      labels:
+        app: nginx-label
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.15.0 
+          ports:
+          - name: nginx-port
+            containerPort: 80
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/nginx/conf.d
+        - name: redis-app 
+          image: ideepesh/k8s-redis-app-svc-disc:envVar
+          imagePullPolicy: Always
+          ports:
+          - name: redis-app-port
+            containerPort: 7080
+          env:
+          - name: SVC_DISC_REDIS_HOST
+            value: redis-service
+      volumes:
+      - name: config-volume
+        configMap:
+          name: nginx-config
+          itmes:
+          - key: reverseproxy.conf
+            value: reverseproxy.conf

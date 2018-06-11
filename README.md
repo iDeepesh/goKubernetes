@@ -31,7 +31,7 @@
   - kubectl get service
   - kubectl describe service scratch-app-pod-svc
   - minikube service scratch-app-pod-svc --url
-  - URL_RETRIEVED_WITH_PREVIOUS_COMMAND/Arya
+  - curl URL_RETRIEVED_WITH_PREVIOUS_COMMAND/Arya
 - kubectl exec scratch-app -- ANY_COMMAND
 - kubectl delete service scratch-app-pod-svc
 - kubectl delete pod scratch-app
@@ -50,7 +50,7 @@
   - kubectl get service
   - kubectl describe service scratct-app-rc-svc
   - minikube service scratch-app-rc-svc --url
-  - URL_RETRIEVED_WITH_PREVIOUS_COMMAND/Arya
+  - curl URL_RETRIEVED_WITH_PREVIOUS_COMMAND/Arya
 - kubectl delete service scratch-app-rc-svc
 - kubectl delete replicationcontroller scratch-app-controller
 
@@ -69,13 +69,13 @@
   - kubectl get service
   - kubectl describe service scratct-app-dep-svc
   - minikube service scratch-app-dep-svc --url
-  - URL_RETRIEVED_WITH_PREVIOUS_COMMAND/Arya
+  - curl URL_RETRIEVED_WITH_PREVIOUS_COMMAND/Arya
 - kubectl set image deployment/scratch-app-deployment k8s-demo=ideepesh/k8s-demo:v1
 - kubectl rollout status deployment/scratch-app-deployment
-- URL_RETRIEVED_WITH_PREVIOUS_COMMAND/Arya
+- curl URL_RETRIEVED_WITH_PREVIOUS_COMMAND/Arya
 - kubectl rollout undo deployment/scratch-app-deployment
 - kubectl rollout status deployment/scratch-app-deployment
-- URL_RETRIEVED_WITH_PREVIOUS_COMMAND/Arya
+- curl URL_RETRIEVED_WITH_PREVIOUS_COMMAND/Arya
 - kubectl delete service scratch-app-dep-svc
 - kubectl delete deployment scratch-app-deployment
 
@@ -87,7 +87,7 @@
 - kubectl create -f config/k8sDemoSvc.yml
 - kubectl get service
 - minikube service scratch-app-dep-svc --url
-- URL_RETRIEVED_WITH_PREVIOUS_COMMAND/Arya
+- curl URL_RETRIEVED_WITH_PREVIOUS_COMMAND/Arya
 - kubectl delete service scratch-app-dep-svc
 - kubectl delete deployment scratch-app-deployment
 
@@ -144,7 +144,7 @@
 - kubectl get service
 - minikube service redis-app-service --url
 - redis-cli -h IP_OF_THE_SERVICE -p 32002
-- APP_URL_RETRIEVED_IN_PREVIOUS_COMMAND:32001/Arya
+- curl APP_URL_RETRIEVED_IN_PREVIOUS_COMMAND:32001/Arya
 - kubectl delete service redis-app-service
 - kubectl delete pod redis-app
 
@@ -161,7 +161,7 @@
 - kubectl create -f config/k8sRedisAppSvc.yml
 - kubectl get service
 - minikube service redis-app-service --url
-- APP_URL_RETRIEVED_IN_PREVIOUS_COMMAND:32001/Arya
+- curl APP_URL_RETRIEVED_IN_PREVIOUS_COMMAND:32001/Arya
 - kubectl delete service redis-app-service
 - kubectl delete service redis--service
 - kubectl delete pod redis-app-svc-disc
@@ -187,6 +187,24 @@
 - kubectl delete configmap user-config
 - kubectl delete configmap prop-config
 
+# Using nginx as reverse proxy with configMap/volume specifying nginx configuration
+- minikube start
+- cd nginx 
+- kubectl create -f config/k8sRedisPod.yml
+- kubectl describe pod redis-pod
+- kubectl create -f config/k8sRedisSvc.yml
+- kubectl get service
+- kubectl create configmap nginx-config --from-file=config/reverseproxy.conf
+- kubectl create -f config/k8sNginxDep.yml
+- kubectl create -f config/k8sNginxSvc.yml
+- kubectl get service
+- minikube service nginx-service --url
+- curl APP_URL_RETRIEVED_IN_PREVIOUS_COMMAND:32080/Arya
+- kubectl delete service nginx-service
+- kubectl delete deployment nginx-dep
+- kubectl delete configmap nginx-config
+- kubectl delete service redis-service
+- kubectl delete pod redis-pod
 
 # Debugging tricks
 - k8s: Simple port forwarding on localhost to pod:
