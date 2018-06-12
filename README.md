@@ -206,6 +206,27 @@
 - kubectl delete service redis-service
 - kubectl delete pod redis-pod
 
+# Ingress controller with [Nginx Ingress controller](github.com/kubernetes/ingress-nginx)
+- cd ingressCongroller
+- minikube start
+- minikube addons list
+- minikube addons enable ingress
+- kubectl create -f config/k8sRedisPod.yml
+- kubectl create -f config/k8sRedisSvc.yml
+- kubectl create -f [config/mandatory.yaml](https://github.com/kubernetes/ingress-nginx/blob/master/deploy/mandatory.yaml)
+- kubectl create -f [config/service-nodeport.yaml](https://github.com/kubernetes/ingress-nginx/blob/master/deploy/provider/baremetal/service-nodeport.yaml)
+- kubectl create -f config/k8sIngress.yml
+- minikube ip
+- curl IP_OF_CLUSTER
+- curl IP_OF_CLUSTER/Sansa -H 'Host: foo.bar.com'
+- curl IP_OF_CLUSTER/Sansa -H 'Host: bar.baz.com'
+- curl IP_OF_CLUSTER/Arya -H 'Host: bar.baz.com'
+- curl IP_OF_CLUSTER/Arya -H 'Host: foo.bar.com'
+- kubectl delete namesapce ingress-nginx
+- kubectl delete ingress ingress-resource
+- kubectl delete service redis-app-service
+- kubectl delete pod redis-app
+
 # Debugging tricks
 - k8s: Simple port forwarding on localhost to pod:
   - kubectl port-forward FULL_POD_NAME 6080:7080

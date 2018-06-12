@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-resource
+spec:
+  rules:
+  - host: foo.bar.com
+    http:
+      paths:
+      - path: /Sansa
+        backend:
+          serviceName: redis-app-service
+          servicePort: 32001
+  - host: bar.baz.com
+    http:
+      paths:
+      - path: /Arya
+        backend:
+          serviceName: redis-app-service
+          servicePort: 32001
